@@ -1,0 +1,525 @@
+
+5 
+User
+C
+Root
+#if 0 // debug
+: sp stack pause ; sp
+C
+: sp stack pause ; sp
+#else
+: sp ; //stack pause ; sp
+#endif 
+location
+//dbgOn 
+//verbosity 4 =
+
+// maybe we're shooting for a "smart syntactic language" that will parse "poetic" syntactic arrangements
+#if 1 // if 0
+optimizeOn inlineOn 
+System Interpreter Combinators PrefixCombinators
+C String
+"Dlsym" namespace Dlsym "libc" namespace libc
+#if 1 //Zenfone2 @ not
+libc.printf ("\nhello %d\n", 7) //pause
+#endif
+C
+User
+Class
+//verbosity 3 =
+
+c_syntaxOn
+libc C
+sp
+typedef struct
+{
+    int64 hi ;
+    char chars [ 32 ] ;
+    int64 hey ;
+    int64 heey2 ;
+    char chars2 [ 32 ] ;
+    int64 heey ;
+    int64 heey1 ;
+} CObj ;
+"CObj size =" ps CObj size dup 104 _assert p 
+CObj 'chey new ; 
+chey.hi = 1234 ;
+_assert0 ( chey.hi 1234 ) ; sp
+dump ( chey, chey.size ) ; sp
+printf ( "\n\tchey.hi = %d", chey.hi ) ; sp
+chey.chars [2] = 255 ;
+sp 
+chey.heey = #x0123456789abcdef ; 
+dump ( chey, chey.size ) ;
+printf ( "\n\tchey.heey = %lx", chey.heey ) ; sp
+chey.heey #x0123456789abcdef _assert0
+dump ( chey, chey.size ) ;
+sp
+chey.heey1 = chey.heey ;
+chey.heey = chey.heey1 ; // #x0123456789abcdef ;
+chey.heey2 = chey.heey1 ; // #x0123456789abcdef ; 
+chey.heey2 = chey.heey1 ; // #x0123456789abcdef ;
+chey.hey = chey.heey1 ; // #x0123456789abcdef ;
+chey.hey chey.heey1 _assert0
+dump ( chey, chey.size ) ;
+printf ( "\n\tchey.hey = %lx", chey.hey ) ; 
+
+sp
+chey.chars [23] = 255 ;
+chey.chars [18] = #b10110 ; // #x16
+//chey.hey = #x12345678 ;
+dump ( &chey, CObj.size ) ; 
+sp
+printf ( "\nCObj.size = %d",CObj.size ) ; 
+printf ( "\n%s%lx", "\nchey = ", chey ) ;
+printf ( "\n%s%lx", "\nchey.hey = ", chey.hey ) ; sp 
+printf ( "\n%s%lx", "\n&chey.hey = ", &chey.hey ) ; sp
+hp ( chey.hey ) ; 
+hp ( &chey.hey ) ;
+sp
+C
+decimal
+var ( "x7" ) ;
+x7 = &chey.chars [ 18 ] ;
+sprintf ( x7, "%s", "\n\thoot" ) ;
+printf ( "%s", x7 ) ;
+//pause
+sprintf ( &chey.chars, "%s", "well" ) ;
+dump ( chey, CObj.size ) ; 
+//sprintf ( &chey.chars [ 24 ], "%s", "do or don't" ) ;
+sprintf ( &chey.chars [ 24 ], "%s", "don't" ) ;
+dump ( chey, CObj.size ) ; 
+sprintf ( &chey.chars, "%s", "hoot" ) ;
+dump ( chey, CObj.size ) ; 
+sprintf ( &chey.chars, "%s", "ok! don't hoot" ) ;
+dump ( chey, CObj.size ) ; 
+sprintf ( &chey.chars, "%s", "well, do or don't hoot" ) ;
+dump ( chey, CObj.size ) ; 
+
+printf ( "\n\t%s\n", &chey.chars [ 24 ] ) ;
+printf ( "\n\t%s\n", "hoot" ) ; //&chey.chars [ 24 ] ) ;
+dump ( chey, CObj.size ) ; // add '&' within parentheses for lvalue
+//pause
+sp
+scOn
+libc
+void
+chi ( CObj chey0, d | a b c )
+{
+    c = 1 + 2 ;
+    b = c + 2 ;
+    a = b + c ;
+    nl
+    p ( c ) ; c 3 "c should be 3" assert // 3
+    p ( b ) ; b 5 "b should be 5" assert // 5
+    p ( a ) ; a 8 "a should be 8" assert // 8
+    dump ( &chey0, CObj.size ) ; 
+    d = CObj.chey0.hey ;
+    hex p ( d ) ;
+    printf ( "\n chi : d = %lx\n", d ) ;
+    sprintf ( &CObj.chey0.chars, "\n\t\they = %lx", d ) ; // add '&' within parentheses for lvalue
+    printf ( "\n chi : d = %lx\n", d ) ;
+    sprintf ( &CObj.chey0.chars2, "\n\t\they hey = %lx", CObj.chey0.hey ) ;
+    printf ( "\n CObj.chey0.chars = %s\n", &CObj.chey0.chars ) ;
+    printf ( "\n CObj.chey0.chars2 = %s\n", &CObj.chey0.chars2 ) ;
+    printf ( "\n chi : d = %lx\n", d ) ;
+    d = CObj.chey0.hey ;
+    printf ( "\n%lx\n", d ) ;
+    printf ( "\n chi : d = %lx\n", d ) ;
+    _assert ( d #x0123456789abcdef ) ; 
+    printf ( "\n%x\n", CObj.chey0.hey ) ;
+    sprintf ( &chey0.chars [ 24 ], "%s", "hoot" ) ;
+    dump ( &chey0, CObj.size ) ; 
+} prefix
+pwi chi
+chi ( chey, 7 ) ;
+//pause
+interpret () ; // from interpreter.csl
+sp
+#if 1
+void
+interpret2 ( | atoken aword ) 
+{
+    testc1 () ; //pause () ;
+    nl tab () ; ps ( "interpret2 :> " ) ; nl
+    while ( 1 )
+    {   
+        atoken = token () ; 
+        printf ( "\n\tinterpret2 : token = %s", atoken ) ; 
+        if ( ! ( strcmp ( atoken, "i2halt" ) ) ) 
+        { 
+            printf ( "\n\tinterpret2 exiting..." ) ; return ; //goto: done ; 
+        }        
+        // test comment here
+        else
+        // test comment here
+        {
+            aword = tokenToWord ( atoken ) ;
+            doWord ( aword ) ;
+        }
+    }
+    //label: done ;
+//<dbg>
+}
+
+void
+interpret3 ( | atoken aword ) 
+{
+    testc1 () ; //pause () ;
+    nl () ; tab () ; 
+    ps ( "interpret3 :> " ) ; nl () ;
+    while ( 1 )
+    {   
+        atoken = token () ; 
+        printf ( "\n\tinterpret3 : token = %s", atoken ) ; 
+        if ( ! ( strcmp ( atoken, "i3halt" ) ) ) 
+        { 
+            printf ( "\n\tinterpret3 exiting..." ) ; 
+            //break ; 
+            goto: done ;
+            //return ;
+        }
+        else 
+        {       
+            aword = tokenToWord ( atoken ) ;
+            doWord ( aword ) ;
+        }       
+    }
+    label: done ;
+}
+#endif // <~ l.137
+
+pwi interpret2
+pwi interpret3
+C
+sp
+
+#if 1
+//verbosity = 3 ;
+interpret2 
+using sp
+#if 1
+int
+fac40 ( n  | facc ) 
+{ 
+    int facc = 1 ;
+#if 1
+    while ( n > 1 ) facc = n -- * facc ;
+#else
+    while ( n > 1 ) facc *= n -- ;
+#endif
+    return facc ;
+} 
+pwi fac40  //pause
+fac40 (7) dup p 5040 _assert sp //pause
+#endif 
+
+i2halt sp
+interpret3
+c_syntaxOff
+
+User
+words  
+sp 
+
+: hi1 1 2 + p ;  
+: hey1 hi1 hi1 ; 
+: heey1 hey1 hey1 hey1 ;
+nl heey1 
+
+#if 1 
+c_syntaxOn
+int
+faccs2 ( n | rec ) 
+{
+    for ( rec = 1 ; n > 1 ; n-- )
+    { 
+        rec = rec * n ; 
+    } 
+    return rec ;
+} 
+pwi faccs2 // why not in c syntax here and in next line ??
+faccs2 (7) dup p 5040 _assert0 
+sp 
+
+void
+interpret4 ( | atoken aword ) 
+{
+    printf ( "\n\tinterpret4 :> " ) ;
+    while ( 1 )
+    {   
+        atoken = token () ; 
+        printf ( "\n\tinterpret4 : token = %s", atoken ) ; 
+        if ( ( ! atoken ) || ( ! ( strcmp ( atoken, "i4halt" ) ) ) )
+        { 
+            printf ( "\n\n\ttoken = %s :: interpret4 exiting ...", atoken ) ; 
+            return ; 
+        }
+        else
+        {
+            aword = tokenToWord ( atoken ) ;
+            doWord ( aword ) ;
+        }
+    }
+}
+//pause
+i3halt sp // code to exit interpret3
+interpret4
+C
+int
+faccs3 ( n | rec ) 
+{
+    for ( rec = 1 ; n > 1 ; n-- )
+    { 
+        rec = rec * n ; 
+    } 
+    return rec ;
+} 
+' faccs3 find wdiss
+faccs3 (7) dup p 5040 _assert0 sp
+i4halt sp // code to exit interpret4
+c_syntaxOff
+#endif // <~ l.225
+//ihalt //interpret from interpreter.csl
+C
+sp
+c_syntaxOn
+C String libc
+typedef struct { byte buf [ 256 ] ; } CBuffer ;
+void
+$ ( | atoken, buffer, CBuffer buffer0 ) 
+{
+    buffer = &buffer0.buf ;
+    memset ( buffer, 0, CBuffer.size ) ; 
+    while ( atoken = token () ) 
+    {   
+        printf ( "\n\ttoken = %s\n", atoken ) ; //pause () ;
+        if ( ! strcmp ( atoken, ";" ) ) 
+        { 
+            printf ( "\n\tbuffer = %s\n", buffer ) ; //pause () ;
+            sh ( buffer ) ;
+            break ; 
+        }
+        else 
+        { 
+            if ( strcmp ( atoken, "." ) )
+            {
+                strcat ( buffer, " " ) ; // for shell '.' which means current directory - needs the space after
+            }
+            strcat ( buffer, atoken ) ;
+        }
+    }
+} 
+'void.$ find wdiss 
+sp
+
+c_syntaxOff 
+#if 1 //doScript2 
+"\n\nnew $ test\n" ps
+$ls -al . ;
+$ etc/script ; 
+$$ etc/lispScript ; 
+$$ls -al /usr/local ; 
+$$ ls -al . ;
+#endif
+
+C
+sp
+verbosity 1 =
+infixOff
+1 opOn
+: hi ( a b | c ) c a @ b @ + = printf ("\nshould read 3 : %d", c ) ; 1 2 hi 
+sp
+c_syntaxOn
+sp
+int
+fac5 ( REG n  | REG facc ) 
+{ 
+    facc = 1 ;
+    while ( n > 1 ) 
+    {
+        //facc *= (n --) ; // parenthesis a must for now ??
+        facc *= n -- ;
+    }
+    return facc ;
+}
+pwi fac5
+fac5 ( 7 ) dup p 5040 _assert 
+cOff
+#if 1
+infixOff
+Int Root.Experimental 
+'xyxz var
+{
+    'a var 'b var
+    a 2 = 
+    b 4 =
+    a @ b @ + 2 / dup p 3 _assert0
+} xyxz store
+xyxz @ bdis
+nl
+xyxz @ ix 
+xyxz @ ix 
+"\nabove line should show 3 3" ps
+cOn
+infixOn
+void yada () { int a = 2, b = 12, x ; x = (( a + b ) / 2 ) ; return (x) ; } pwi yada yada () ; 7 s _assert s
+void yadaYada () { int a, b, x ; a = 2, b = 12 ; x = (( a + b ) / 2 ) ; return  ( x ) ; } pwi yadaYada yadaYada () ; 7 _assert s
+cOff
+//forStarters 1 =
+#endif
+
+
+ihalt
+
+#if 1
+cOff
+'fw var
+: wtdInclude "namespaces/wordTypeDef.csl" include ;
+wtdInclude 
+pwi wtdInclude
+'wtdInclude find dup dup fw store hp Word size @ dump fw hp fw @ hp
+fw @ hp fw->Definition hp 
+cOn
+C.Experimental 
+printf ( "\nIdentifier = %lx, Identifier.size = %d, WordData.size = %d, Stack.size = %d", Identifier, Identifier.size, WordData.size, Experimental.Stack.size ) ;
+printf ( "\nTypeInfo.size = %d, DLNode.size = %d, dllist.size = %d, dlnode.size = %d\n\n", TypeInfo.size, DLNode.size, dllist.size, dlnode.size ) ;
+void tfw ( w ) { hp ( w->Definition ) ; } 
+void tfw ( w ) { hp ( w->Definition ) ; ps ( w->S_Name ) ; } 
+#define W_Filename W_WordData->Filename 
+#define Name S_Name
+void tfw1 ( w ) { hp ( w->Definition ) ; ps ( w->S_Name ) ; ps ( w->Name ) ; hp ( w->W_Filename ) ; ps ( w->W_Filename ) ; ps ( w->W_WordData->Filename ) ; } 
+pwi tfw1
+wdiss ( 'tfw1 find ) ;
+tfw (fw); tfw1 ( fw ) ; //pause
+cOff
+'C_Syntax.tfw find wdiss 
+fw @ tfw
+infixOn
+: ftfw1 ( w ) nl w->Definition hp w->S_Name ps w->Name ps w->W_Filename ps w->W_Filename ps w->W_WordData->Filename ps ;
+: ftfw1 ( w ) nl w->Definition hp w->S_Name ps w->Name ps w->W_Filename ps w->W_Filename ps w->W_WordData->Filename ps ;
+infixOff
+Infix
+fw @ ->W_Filename ps //pause 
+fw @ ftfw1
+pwi ftfw1
+//pause
+//'wtdInclude find 'dlnode find wordStructPrint  
+//pause
+//'wtdInclude find '_DLNode find wordStructPrint  
+//pause
+//'wtdInclude find 'DLNode find wordStructPrint  
+//pause
+'wtdInclude find dup hex p 'C.Experimental.Word find wordStructPrint 
+//pause
+cOn
+//printf ( "\n_Identifier.CodeSize = %lx, _Identifier.CodeSize = %d", _Identifier.CodeSize, _Identifier.CodeSize ) ;
+printf ( "\nIdentifier.size = %d, WordData.size = %d, Stack.size = %d", Identifier.size, WordData.size, Experimental.Stack.size ) ;
+printf ( "\nTypeInfo.size = %d, DLNode.size = %d, dllist.size = %d, dlnode.size = %d\n\n", TypeInfo.size, DLNode.size, dllist.size, dlnode.size ) ;
+cOff
+stateAll
+: tt ( fw | w ) fw @ hp w fw @ = nl w @ ->Definition hp w @ ->S_Name ps w @ ->Name ps w @ ->W_Filename ps w @ ->W_Filename ps w @ ->W_WordData->Filename ps ;
+nl 'wtdInclude find dup hp tt //pause
+infixOn
+: tti ( wrd ) "\ntti" ps wrd->Definition hp wrd->S_Name ps wrd->Name ps wrd->W_Filename ps wrd->W_Filename ps wrd->W_WordData->Filename ps ;
+'ttfw var
+nl 'tti find dup hp tti //pause
+infixOff
+cOn
+void ctti ( w | p l ) 
+{ 
+    ps ( "\nctti" ) ; l = w->Definition ; 
+    printf ( "\nDefinition = %lx", l ) ; p = w->S_Name ; ps(p) ; p = w->Name ; ps(p) ; 
+    p = w->W_Filename ;  ps(p) ; p = w->W_Filename ; ps (p) ; 
+    p = w->W_WordData->Filename ; ps (p) ; 
+    p = w->W_WordData ;
+    //<dbg> ptrStructNamePrint ( p, "WordData" ) ;
+    ptrStructNamePrint ( p, "WordData" ) ;
+}
+ctti ( find ( 'ctti ) ) ; //pause () ;
+cOff
+C_Syntax
+pwi ctti
+'ctti find fw store fw @ ctti 
+_find ( 'ctti ) ctti 
+//pause
+'C.Experimental notUsing
+#endif
+
+#if 1
+cOn
+typecheckOn
+C.Experimental 
+typedef struct _byteTest 
+{
+    byte a8_123 ; 
+    int64 a64_123 ;
+    byte b8_123 ;
+    byte c8_123 ; // test comment
+    union
+    {
+        int64 u64_123 ;
+        int32 u32_123 ;
+        int8 u8_123 ;
+    } ; //size = 8 
+    int32 a32_123 ;
+    byte d8_123 ;
+    int16 a16_123 ; 
+} byteTest, abyteTest ; // size = 26 + (26 % 4) = 28 
+byteTest 'bt new ;
+pwi byteTest //pause
+ps ( "\nbt.size =" ) ; p ( bt.size ) ;
+void bttt ( byteTest xbt | btt ) 
+{ 
+    printf ( "\nbtt" ) ;
+    //d: xbt.a8_123 = 598 ; 
+    xbt.a8_123 = 'a' ; 
+    btt = xbt.a8_123 ; 
+    printf ( "\nbtt = %c", btt ) ; 
+    xbt.b8_123 = 'b' ; xbt.c8_123 = 'c' ; xbt.a16_123 = 0x1234 ; 
+    xbt.a32_123 = 0x12345678, xbt.a64_123 = 0x123456789abcdef ; //pause
+    xbt.u32_123 = 0x1234567, btt = 0xfedcba0987654321 ;
+    printf ( "\nbt.a16_123 = 0x%x ", xbt.a16_123 ) ; 
+    printf ( "\nbt.a32_123 = 0x%x ", xbt.a32_123 ) ; 
+    printf ( "\nbt.a64_123 = 0x%lx ", xbt.a64_123 ) ; 
+    printf ( "\nbt.u32_123 = 0x%lx ", xbt.u32_123 ) ; 
+    printf ( "\nbt.a8_123 = %c ", xbt.a8_123 ) ; 
+    printf ( "\nbt.b8_123 = %c ", xbt.b8_123 ) ; 
+    printf ( "\nbt.c8_123 = %c ", xbt.c8_123 ) ; 
+    printf ( "\nbtt = %c", btt ) ; 
+    dump ( &xbt, xbt.size ) ; 
+    hp ( xbt.a8_123 ) ;
+} 
+byteTest 'bt new ;
+pwi bttt
+bttt ( bt ) ;  //pause // error size not considered
+'bt find 'byteTest find wordStructPrint 
+cOff
+//pause    
+#endif
+sp
+
+#if doWp @
+C.Experimental
+stateAll    
+"\nWord size = " ps Word size @ p
+"\nWordData size = " ps WordData size @ p
+"\nDLNode size = " ps DLNode size @ p
+"\ndobject size = " ps C.Experimental dobject size @ p
+"\nAttributeInfo size = " ps AttributeInfo size @ p
+pwi Word
+'C.Experimental notUsing 
+//pause
+#endif    
+c_syntaxOff 
+sp
+
+bnOff
+infixOn
+(1 + 5) / (2 + 1) 2 _assert
+infixOff
+sp
+//ihalt
+2 + 7 assertStkChk // stack checking
+sp
+

@@ -1,0 +1,133 @@
+5 
+C
+scOn
+Root
+: sp  ; sp
+lispOff
+//optimizeOff
+
+System Interpreter 
+// these #defines are purposefully unnecessarily complex (and confusing looking) for testing
+#define xhe0 "xhi1 ="  
+#define xhe1() nl ps 
+#define xhe12( str ) str @ nl ps 
+#define xhi2( n ) xhe12 ( xhe0 ) 1 2 \
+            + n @ \
+            + p // backslash also works like in a C #define 
+#define xhi2a( str n ) xhe12 ( str @ ) 1 2 \
+            + n @ \
+            + p 
+#define xhi01 xhe0 xhe1()
+#define xhi1 p (1 + 2 + 4) 
+// #define is in the preprocessor vocabulary and can be used anywhere
+infixOn 
+#define xhi0 p (1 + 2 + 4) 
+c_syntaxOn
+// note syntax is tolerant
+#define xhii( n ) p (1 + 2 + n) 
+#define xhi( n ) ps ( "\nxhi = " ), p ( 1 + 2 + n ) 
+#define xxhi( n ) ps ( "\nxxhi : " ) xhi ( n ) xhii ( n ) 
+#define yhi( n ) ps ("\nyhi : " ) ; p ( 1 + 2 + n ) xxhi ( n )
+#define zhi( n ) ps ("\nzhi : " ) ; yhi(4) ; p ( 1 + 2 + n ) ; xxhi ( n ) ;
+xxhi ( 4 ) ; yhi ( 4 ) ; zhi(4) ;
+//pause
+
+void
+testc1 () 
+{
+    int tdbg = 1, tdbg2 = 2, tdbg3 = 3 ; 
+    int tdbg4 = 4, tdbg5 = 5, tdbg6 = 6 ; 
+    ps ( "\ntdbg =" ) ; p ( tdbg ) ; 
+    ps ( "\ntdbg2 =" ) ; p ( tdbg2 ) ; 
+    ps ( "\ntdbg3 =" ) ; p ( tdbg3 ) ; //pause () ;
+    ps ( "\ntdbg4 =" ) ; p ( tdbg4 ) ; 
+    ps ( "\ntdbg5 =" ) ; p ( tdbg5 ) ; 
+    ps ( "\ntdbg6 =" ) ; p ( tdbg6 ) ; //_pause () ;
+    ps ("\nlast line"); ps ( "\nxhii =" ) ; xhii (4) ; xhi (4) ; xhi0; xhi1 () ; xhi( 4 ); xhi01 ; xhi1 ; xhi2(8) ; xhi2a ( "xhi2a =", 8 ) ; 
+} prefix
+'testc1 find wdiss sp
+testc1 () ; sp 
+//pause
+#if 1
+C libc
+#if 1
+void
+interpret ( | atoken aword ) 
+{
+    testc1 () ; xhi01 ; xhi1( ) ; xhi2 ( 8 ) ; xhi2a ( "xhi2a =", 8 ) ; 
+    nl( ) ; tab ( ) ; ps ( "interpret2 :> " ) ; nl ( ) ;
+    while ( 1 )
+    {   
+        atoken = token () ; 
+        printf ( "\n\ttoken = %s\n", atoken ) ; 
+        if ( ( ! atoken ) || ( ! ( strcmp ( atoken, "ihalt" ) ) ) )
+        { 
+            printf ( "\n\n\ttoken = %s :: interpret exiting ...", atoken ) ; 
+            //_pause ();
+            return ; 
+        }
+        else
+        {
+            if ( atoken )
+            {       
+                aword = tokenToWord ( atoken ) ;
+                doWord ( aword ) ;
+            }       
+        }
+    }
+}
+#else
+void
+interpret ( | atoken aword ) 
+{
+    testc1 () ; //pause () ;
+    nl tab () ; ps ( "interpret2 :> " ) ; nl
+    while ( 1 )
+    {   
+        atoken = token ( ) ; 
+        printf ( "\n\tinterpret2 : token = %s", atoken ) ; 
+        if ( ! ( strcmp ( atoken, "ihalt" ) ) ) 
+        { 
+            printf ( "\n\tinterpret exiting..." ) ; return ; //goto: done ; 
+        }        
+        // test comment here
+        else
+        // test comment here
+        {
+            aword = tokenToWord ( atoken ) ;
+            doWord ( aword ) ;
+        }
+    }
+    //label: done ;
+//<dbg>
+}
+
+
+#endif
+interpret 
+pwi interpret //' interpret2 find wdiss
+c_syntaxOff 
+sp
+
+using 
+//pause
+User
+: hi1 1 2 + p ; hi1
+: hey1 hi1 hi1 ; 
+: heey1 hey1 hey1 hey1 ;
+nl heey1 
+
+ihalt
+C
+sp
+"PrefixCombinators" notUsing
+//infixOff
+sp
+#endif
+
+
+c_syntaxOff 
+2 + 7 assertStkChk // stack checking
+//
+1 ? "hi" ps : "error" ps ;
+//
