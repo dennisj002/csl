@@ -249,12 +249,15 @@ sp
 (swch2 3 4) 
 (define x (swch 8 15) )  ( - @x) 
 (define x (swch 8 19) )  ( - @x) 
-(car ( 7 8 ) ) ( car 7 8 ) ( cdr ( 6 7 ) ) ( cdr 6 7 )
+(car ( 7 8 ) ) ( car 7 8 ) ( cdr ( 6 7 ) ) ( cdr 7 6 )
 sp
 
 lcOff
 Root.List
-_((lambda ( a b) (+ a b)) 3 4 ) dupList eval printList printList s lispOff
+nl
+_((lambda ( a b) (+ a b)) 3 4 ) dupList eval printList nl printList nl //pause
+nl _((lambda ( a b) (+ a b)) 3 4 ) dupList printList eval nl printList nl //pause
+nl _((lambda ( a b) (+ a b)) 3 4 ) eval printList nl //pause
 : bexp3 ( n ) { n @ 1 > } { n @ n @ -- bexp3 *  } { 1 } ifElse ;
 'bexp3 find wdiss 7 bexp3 p sp
 c_syntaxOn

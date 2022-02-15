@@ -144,7 +144,7 @@ OVT_PauseInterpret ( Context * cntx, byte key )
     ReadLine_Init ( rl, _CSL_Key ) ;
     SetState ( cntx, AT_COMMAND_LINE, true ) ;
     if ( ( key <= ' ' ) || ( key == '\\' ) ) key = 0 ;
-    Printf ( "\nPause interpreter : hit <enter> or <esc> to exit\n" ) ;
+    Printf ( "\nPause interpreter : hit <enter> or <esc> to exit : \n" ) ;
     do
     {
         svPrompt = ReadLine_GetPrompt ( rl ) ;
@@ -196,7 +196,7 @@ OVT_Pause ( byte * prompt, int64 signalExceptionsHandled )
 
             int64 key = Key ( ) ;
             _ReadLine_PrintfClearTerminalLine ( ) ;
-            Printf ( "\nPause : press <enter> to exit" ) ;
+            Printf ( "\nPause : press <enter> to exit : \n" ) ;
             switch ( key )
             {
                 case 'x': case 'X':
