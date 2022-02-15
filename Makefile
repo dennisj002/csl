@@ -203,8 +203,7 @@ _cproto :
 	sudo make install
 
 cproto : 
-	cp sudo cp bin/cproto /usr/local/bin
-	#sudo apt-get install cproto
+	sudo apt-get install cproto
 	
 tar.xz :	
 	tar -c --xz --exclude=lib --exclude=archive --exclude=nbproject --exclude=objects --exclude=archive--exclude=mpfr* --exclude=.git --exclude=*.png --exclude=*-gdb  --exclude=*.o --exclude *.kdev* -f ../csl.tar.xz * 
