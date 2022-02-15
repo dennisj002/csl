@@ -133,14 +133,13 @@ lcOn //(lcDbOn)
 (define fibc2 ( lambda ( n ) ( ifElse ( < n 2 ) n ( + ( fibc2 ( - n 1 ) ) ( fibc2 ( - n 2 ) ) ) ) ) )
 pwi fibc2 
 (fibc2 20)
-#if 0    
-(define ( fibc21  n ) ( if ( < n 2 ) n ( + ( fibc21 ( - n 1 ) ) ( fibc21 ( - n 2 ) ) ) ) )
+#if 0
+(define ( fibc21  n ) ( if ( < n 2 ) n ( + ( fibc21 ( - n 1 ) ) ( fibc21 ( - n 2 ) ) ) ) ) // recursive form ; very slow
 pwi fibc21 
 (fibc21 20)
-//pause
 #endif
+//pause
     
-//(ld:) 
 (define fibbc (lambda (n ) (ifElse (< n 2) n (+ (fibbc (- n 1)) (fibbc (- n 2))))))
 // tick fibbc find wdiss
 (fibbc 20)
