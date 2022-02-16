@@ -296,7 +296,6 @@ void
 Compile_CalculateWrite_Instruction_X64 ( uint8 opCode0, uint8 opCode1, uint8 mod, uint8 reg, uint8 rm, uint16 controlFlags, uint8 sib, uint64 disp, uint8 dispSize, uint64 imm, uint8 immSize )
 {
     uint8 rex = Calculate_Rex ( reg, rm, ( immSize == 8 ) || ( controlFlags Bits.& REX_W ), ( controlFlags Bits.& REX_B ) ) ;
-    //uint8 rex = Calculate_Rex (reg, rm, ( immSize == 8 ), ( controlFlags Bits.& REX_B ) ) ;
     uint8 modRm = CalculateModRmByte ( mod, reg, rm, sib, disp ) ;
     _Compile_Write_Instruction_X64 ( rex, opCode0, opCode1, modRm, controlFlags, sib, disp, dispSize, imm, immSize ) ;
 } prefix

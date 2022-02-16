@@ -438,7 +438,7 @@ doLisp 0 =
     
 dbgOff
 //lisp
-dbgOn 
+//dbgOn 
 //: fl flisp ;
 //fl //ps pause
 //: s9 s9fes ; //s9
