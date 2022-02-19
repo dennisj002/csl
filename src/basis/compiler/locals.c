@@ -204,7 +204,7 @@ CSL_DoReturnWord ( Word * word )
     Word * word1 = CSL_Parse_Interpret_KeywordOperand ( word, 1 ) ;
     if ( word1 )
     {
-        compiler->ReturnLParenVariableWord = word1 ;
+        compiler->ReturnVariableWord = word1 ;
         if ( word1->W_ObjectAttributes & REGISTER_VARIABLE ) SetHere ( word1->Coding, 1 ) ;
         else Word_Check_ReSet_To_Here_StackPushRegisterCode ( word1, 0 ) ;
         if ( ! _Readline_Is_AtEndOfBlock ( _Context_->ReadLiner0 ) ) _CSL_CompileCallGoto ( 0, GI_RETURN ) ;
@@ -212,12 +212,13 @@ CSL_DoReturnWord ( Word * word )
     }
     if ( word->W_MorphismAttributes & ( T_TOS ) )
     {
+        //compiler->ReturnWord = word ;
         SetState ( compiler, RETURN_TOS, true ) ;
         byte mov_r14_rax [] = { 0x49, 0x89, 0x06 } ; //mov [r14], rax
         if ( memcmp ( mov_r14_rax, Here - 3, 3 ) )
         {
-            compiler->ReturnWord = Compiler_CopyDuplicatesAndPush ( compiler->ReturnWord, - 1, - 1 ) ; // want to have a copy because 'return may be responsible for another code output in Compiler_RemoveLocalFrame
-            Compiler_Word_SCHCPUSCA ( compiler->ReturnWord, 0 ) ;
+            ///compiler->ReturnWord = Compiler_CopyDuplicatesAndPush ( compiler->ReturnWord, - 1, - 1 ) ; // want to have a copy because 'return may be responsible for another code output in Compiler_RemoveLocalFrame
+            //Compiler_Word_SCHCPUSCA ( compiler->ReturnWord, 0 ) ;
             Compile_Move_TOS_To_ACCUM ( DSP ) ; // save TOS to ACCUM so we can set return it as TOS below
         }
     }
@@ -249,24 +250,24 @@ CSL_DoReturnWord ( Word * word )
 void
 Compiler_RemoveLocalFrame ( Compiler * compiler )
 {
+    Compiler_WordStack_SCHCPUSCA( 0, 0 )  ;
     if ( ! GetState ( _Compiler_, LISP_MODE ) ) Compiler_WordStack_SCHCPUSCA ( 0, 0 ) ;
     int64 parameterVarsSubAmount = 0 ;
-    Word * returnVariable = compiler->ReturnVariableWord ? compiler->ReturnVariableWord : compiler->ReturnLParenVariableWord ; //?  compiler->ReturnLParenVariableWord :  compiler->ReturnWord ;
+    Word * returnVariable = compiler->ReturnVariableWord ; //? compiler->ReturnVariableWord : compiler->ReturnWord ; //?  compiler->ReturnLParenVariableWord :  compiler->ReturnWord ;
     Boolean returnValueFlag = GetState ( compiler, RETURN_TOS ) || returnVariable ;
     if ( compiler->NumberOfArgs ) parameterVarsSubAmount = ( compiler->NumberOfArgs - returnValueFlag ) * CELL ;
     if ( compiler->NumberOfNonRegisterLocals || compiler->NumberOfNonRegisterArgs )
     {
-#if 1        
-        if ( ( returnValueFlag ) && ( ! IsWordRecursive ) )
-        //if ( ( returnValueFlag ) && ! ( _LC_ ) )
+        if ( ( returnValueFlag ) && ( ! IsWordRecursive ) )  //if ( ( returnValueFlag ) && ! ( _LC_ ) )
         {
             byte add_r14_0x8__mov_r14_rax [ ] = { 0x49, 0x83, 0xc6, 0x08, 0x49, 0x89, 0x06 } ;
-            if ( ! memcmp ( add_r14_0x8__mov_r14_rax, Here - 7, 7 ) )
+            if ( ! memcmp ( add_r14_0x8__mov_r14_rax, Here - 7, 7 ) ) 
             {
+                CSL_AdjustDbgSourceCodeAddress ( Here, Here - 7 ) ;
                 _ByteArray_UnAppendSpace ( _O_CodeByteArray, 7 ) ;
             }
+
         }
-#endif
          // remove the incoming parameters -- like in C
         _Compile_LEA ( DSP, FP, 0, - CELL ) ; // restore sp - release locals stack frame
         _Compile_Move_StackN_To_Reg ( FP, DSP, 1 ) ; // restore the saved pre fp - cf AddLocalsFrame
@@ -282,14 +283,12 @@ Compiler_RemoveLocalFrame ( Compiler * compiler )
         Compiler_Word_SCHCPUSCA ( returnVariable, 0 ) ; // compiler->ReturnWord, 0 ) ;
         if ( returnVariable )
         {
-            //Compiler_Word_SCHCPUSCA ( returnVariable, 0 ) ;
             if ( returnVariable->W_ObjectAttributes & REGISTER_VARIABLE )
             {
                 _Compile_Move_Reg_To_StackN ( DSP, 0, returnVariable->RegToUse ) ;
                 return ;
             }
         }
-        //Compiler_Word_SCHCPUSCA ( compiler->ReturnLParenVariableWord, 0 ) ;
         Compile_Move_ACC_To_TOS ( DSP ) ;
     }
 }

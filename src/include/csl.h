@@ -12,8 +12,8 @@
 #include "machineCodeMacros.h"
 #include "prototypes.h"
 #include "lc.h"
-extern OVT_StaticMemSystem *_OSMS_ ;
-extern OVT_Static * _OS_ ;
+extern OVT_MemSystem *_OMS_ ;
+extern OVT_StaticMemSystem * _OSMS_ ;
 extern OpenVmTil * _O_;
 extern struct termios SavedTerminalAttributes ;
 extern CPrimitive CPrimitives [];
